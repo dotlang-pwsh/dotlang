@@ -173,7 +173,8 @@ function dotasync_check {
     param (
         [int]$JobId
     )
-    Get-Job -Id $JobId
+    $what = Get-Job -Id $JobId
+    return $what.Finished;
 }
 
 function dotasync_get {
