@@ -36,7 +36,7 @@ function create_new_project {
         fi
     else
         echo "{\"dotv\":\"$version\", \"name\":\"mydot\", \"v\": \"0.1\", \"packages\": []}" >dot.json
-		echo "Import-Module .\addons.ps1 # Enable dotlang">main.dot
+		echo "Import-Module .\dot.ps1 # Enable dotlang">main.dot
         echo "Project with name 'mydot' has been made in $PWD."
     fi
 }
@@ -69,7 +69,7 @@ function build_project {
     cp *.dot dist/ >>build.log
     cp *.exe dist/ >>build.log
     cp *.dll dist/ >>build.log
-    cp $script_dir/addons.ps1 dist/ >>build.log
+    cp $script_dir/dot.ps1 dist/ >>build.log
     cd dist || exit
     for f in *.dot; do mv -- "$f" "${f%.dot}.ps1"; done
     cd ..

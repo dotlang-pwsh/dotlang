@@ -4,7 +4,7 @@ a powerful cross-platform Superset for Powershell that extends the functionality
 ## Example
 1- import dotlang,
 ```powershell
-Import-Module .\addons.ps1 # Imports dotlang
+Import-Module .\dot.ps1 # Imports dotlang
 ```
 2- use it :)
 ```powershell

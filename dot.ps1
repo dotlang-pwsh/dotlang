@@ -306,7 +306,6 @@ function fetch {
         [string]$Uri,
 
         [string]$auth = 'NULL',
-
         [string]$Method = 'GET',
 
         [hashtable]$Headers,

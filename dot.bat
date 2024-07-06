@@ -45,7 +45,7 @@ echo Project with name `mydot` has been made in %cd%.
 )
 ) else (
 echo {"dotv":"%version%", "name":"mydot", "v": "0.1", "packages": []} >dot.json
-echo Import-Module .\addons.ps1 # Enable dotlang >main.dot
+echo Import-Module .\dot.ps1 # Enable dotlang >main.dot
 echo Project with name `mydot` has been made in %cd%.
 )
 goto :EOF
@@ -77,7 +77,7 @@ mkdir dist >>build.log
 xcopy /Y *.dot dist >>build.log
 xcopy /Y *.exe dist >>build.log
 xcopy /Y *.dll dist >>build.log
-xcopy /Y %~dp0\addons.ps1 dist >>build.log
+xcopy /Y %~dp0\dot.ps1 dist >>build.log
 cd dist
 ren *.dot *.ps1 >>build.log
 cd ..
