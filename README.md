@@ -10,7 +10,7 @@ Import-Module .\addons.ps1 # Imports dotlang
 ```powershell
 printTxt("Hi I'm dotlang!"); # simicolon (;) is optional.
 ```
-check the `Wiki` for full usage guide.
+check the [Wiki](/neoapps-dev/dotlang/wiki) for full usage guide.
 
 ## License
 This code is licensed under the MIT License.
