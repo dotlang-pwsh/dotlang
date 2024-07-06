@@ -174,7 +174,7 @@ function dotasync_check {
         [int]$JobId
     )
     $what = Get-Job -Id $JobId
-    return $what.Finished;
+    return $what.State -eq "Completed";
 }
 
 function dotasync_get {
@@ -219,8 +219,8 @@ function dotlog_on {
         [string]$LogFile
     )
     Register-EngineEvent -SourceIdentifier PowerShell.OnCommandExecution -Action {
-        $cevent = $Event.MessageData
-        Add-Content -Path $LogFile -Value "$($cevent.InvocationInfo.Line) - $($cevent.InvocationInfo.InvocationName)"
+        $event = $Event.MessageData
+        Add-Content -Path $LogFile -Value "$($event.InvocationInfo.Line) - $($event.InvocationInfo.InvocationName)"
     }
 }
 function dotlog_off {
