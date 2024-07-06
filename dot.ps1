@@ -28,7 +28,7 @@ function Invoke-WebRequestSimple {
     Invoke-RestMethod -Uri $Url
 }
 
-function Encrypt-Data {
+function EncryptData {
     param (
         [string]$Data,
         [string]$Password
@@ -38,7 +38,7 @@ function Encrypt-Data {
     return $encryptedData
 }
 
-function Decrypt-Data {
+function DecryptData {
     param (
         [string]$EncryptedData,
         [string]$Password
