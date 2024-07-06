@@ -380,3 +380,50 @@ function Invoke-DynamicScript {
         return $null
     }
 }
+function dotui {
+    param (
+        [string] $Title,
+        [string[]] $Options
+    )
+
+    $selectedOptionIndex = 0
+    $menuActive = $true
+
+    while ($menuActive) {
+        Clear-Host
+        Write-Host "$Title`n" -ForegroundColor White
+
+        for ($i = 0; $i -lt $Options.Count; $i++) {
+            if ($i -eq $selectedOptionIndex) {
+                Write-Host "   > $($Options[$i])" -BackgroundColor White -ForegroundColor Black
+            } else {
+                Write-Host "     $($Options[$i])"
+            }
+        }
+
+        $key = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").VirtualKeyCode
+
+        switch ($key) {
+            38 { # up key
+                $selectedOptionIndex = [Math]::Max(0, $selectedOptionIndex - 1)
+            }
+            87 { # w key
+                $selectedOptionIndex = [Math]::Max(0, $selectedOptionIndex - 1)
+            }
+            40 { # down key
+                $selectedOptionIndex = [Math]::Min($Options.Count - 1, $selectedOptionIndex + 1)
+            }
+            83 { # s key
+                $selectedOptionIndex = [Math]::Min($Options.Count - 1, $selectedOptionIndex + 1)
+            }
+            13 { # enter key
+                $menuActive = $false
+            }
+            32 { # space key
+                $menuActive = $false
+            }
+        }
+    }
+
+    return $selectedOptionIndex
+}
