@@ -13,7 +13,7 @@ function Invoke-DynamicParameter {
     &$ScriptBlock
 }
 
-function Monitor-Process {
+function MonitorProcess {
     param (
         [string]$ProcessName,
         [scriptblock]$Action
