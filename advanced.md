@@ -21,8 +21,8 @@ simple ain't it?
 yeah, we have this in dotlang :)
 
 ```powershell
-$key = dotaes;
-$key;
+$key = dotaes; # you can just use `$key = "YOUR_KEY_HERE"`
+$key; # optional, displays encrypting key
 $unencryptedString = "blahblahblah";
 # Encrypting
 $encryptedString = EncryptData $key $unencryptedString;
