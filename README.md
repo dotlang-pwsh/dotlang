@@ -16,6 +16,10 @@ Import-Module .\dot.ps1 # Imports dotlang
 printTxt("Hi I'm dotlang!"); # simicolon (;) is optional.
 ```
 
+## Full Usage
+
+Check the [GitBook](./) for full usage guide
+
 ## License
 
 This code is licensed under the MIT License. check LICENSE.TXT for more info
