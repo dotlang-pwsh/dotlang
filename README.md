@@ -16,8 +16,6 @@ Import-Module .\dot.ps1 # Imports dotlang
 printTxt("Hi I'm dotlang!"); # simicolon (;) is optional.
 ```
 
-check the [Wiki](https://github.com/neoapps-dev/dotlang/wiki) for full usage guide.
-
 ## License
 
 This code is licensed under the MIT License. check LICENSE.TXT for more info
