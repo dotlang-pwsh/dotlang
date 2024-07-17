@@ -18,7 +18,7 @@ printTxt("Hi I'm dotlang!"); # simicolon (;) is optional.
 
 ## Full Usage
 
-Check the [GitBook](./) for full usage guide
+Check the [GitBook](https://neoapps.gitbook.io/dotlang) for full usage guide
 
 ## License
 
