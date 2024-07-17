@@ -29,6 +29,10 @@ $encryptedString = EncryptData $key $unencryptedString;
 # Decrypting
 $backToPlainText = DecryptData $key $encryptedString;
 ```
+output:
+
+![image](https://github.com/user-attachments/assets/92885fea-9a88-4589-b3fb-64713e28adf5)
+
 
 ### Asynchronous Command Execution
 
