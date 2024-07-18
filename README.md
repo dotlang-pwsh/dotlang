@@ -4,12 +4,18 @@ a powerful cross-platform Superset for Powershell that extends the functionality
 ## Example
 1- import dotlang,
 ```powershell
-Import-Module .\dot.ps1 # Imports dotlang
+Import-Module ./dot.ps1 # Imports dotlang
+```
+or,
+```powershell
+. ./dot.ps1 # Imports dotlang
 ```
 2- use it :)
 ```powershell
 printTxt("Hi I'm dotlang!"); # simicolon (;) is optional.
 ```
+
+## Full Usage Guide
 check the [Wiki](https://github.com/neoapps-dev/dotlang/wiki) for full usage guide.
 
 ## License

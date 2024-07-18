@@ -2,6 +2,38 @@ $nul = $null;
 $yes = $true;
 $no = $false;
 
+Add-Type -TypeDefinition @"
+using System;
+using System.IO;
+using System.Net;
+using System.Text;
+
+public class dotserver {
+    public static void startServer(int port, string returnData) {
+        string url = "http://localhost:" + port + "/";
+        HttpListener listener = new HttpListener();
+        listener.Prefixes.Add(url);
+        listener.Start();
+        
+        Console.WriteLine("Server started at " + url);
+        
+        while (true) {
+            HttpListenerContext context = listener.GetContext();
+            HttpListenerRequest request = context.Request;
+            HttpListenerResponse response = context.Response;
+            
+            string responseString = returnData;
+            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+            
+            response.ContentLength64 = buffer.Length;
+            Stream output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
+            output.Close();
+        }
+    }
+}
+"@
+
 function Invoke-DynamicParameter {
     param (
         [scriptblock]$ScriptBlock,
@@ -223,7 +255,7 @@ function dotlog_on {
         Add-Content -Path $LogFile -Value "$($event.InvocationInfo.Line) - $($event.InvocationInfo.InvocationName)"
     }
 }
-function dotlog_off {
+function dotlog_ofdf {
     param (
         [string]$LogFile
     )
@@ -427,3 +459,226 @@ function dotui {
 
     return $selectedOptionIndex
 }
+
+function importasm {
+    param (
+        [string]$path
+    )
+    Add-Type -AssemblyName $path
+}
+function == {
+    param (
+        [Parameter(Mandatory = $true)]
+        $Left,
+
+        [Parameter(Mandatory = $true)]
+        $Right
+    )
+    return $Left -eq $Right
+}
+
+function n= {
+    param (
+        [Parameter(Mandatory = $true)]
+        $Left,
+
+        [Parameter(Mandatory = $true)]
+        $Right
+    )
+    return $Left -ne $Right
+}
+
+function =< {
+    param (
+        [Parameter(Mandatory = $true)]
+        $Left,
+
+        [Parameter(Mandatory = $true)]
+        $Right
+    )
+    return $Left -le $Right
+}
+
+function => {
+    param (
+        [Parameter(Mandatory = $true)]
+        $Left,
+
+        [Parameter(Mandatory = $true)]
+        $Right
+    )
+    return $Left -ge $Right
+}
+
+function _< {
+    param (
+        [Parameter(Mandatory = $true)]
+        $Left,
+
+        [Parameter(Mandatory = $true)]
+        $Right
+    )
+    return $Left -lt $Right
+}
+
+function _> {
+    param (
+        [Parameter(Mandatory = $true)]
+        $Left,
+
+        [Parameter(Mandatory = $true)]
+        $Right
+    )
+    return $Left -gt $Right
+}
+
+function dotgui {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$XamlPath,
+
+        [Parameter(Mandatory = $true)]
+        [scriptblock]$ScriptBlock
+    )
+    Add-Type -AssemblyName PresentationFramework
+    $xaml = Get-Content $XamlPath -Raw
+    $reader = (New-Object System.Xml.XmlNodeReader (New-Object System.Xml.XmlDocument))
+    $reader.ReadOuterXml($xaml)
+    $window = [Windows.Markup.XamlReader]::Load($reader)
+    & $ScriptBlock -ArgumentList $window
+    $window.ShowDialog() | Out-Null
+}
+
+function dotuid {
+    return [guid]::NewGuid().ToString();
+}
+
+function dotregex {
+    param(
+        [Parameter(Mandatory=$true)][string]$InputString,
+        [Parameter(Mandatory=$true)][string]$Pattern,
+        [Parameter(Mandatory=$true)][string]$Replacement
+    )
+
+    $regex = New-Object System.Text.RegularExpressions.Regex($Pattern)
+    $result = $regex.Replace($InputString, $Replacement)
+    return $result
+}
+
+# Requires PowerShell 5.0+
+function dotbreak_add {
+    param(
+        [Parameter(Mandatory=$true)][string]$ScriptPath,
+        [Parameter(Mandatory=$true)][int]$LineNumber
+    )
+    
+    return Set-PSBreakpoint -Script $ScriptPath -Line $LineNumber;
+}
+
+function dotbreak_remove {
+    param(
+        [Parameter(Mandatory=$true)][int]$BreakpointId
+    )
+    
+    Remove-PSBreakpoint -Id $BreakpointId
+}
+
+function dotsuggest {
+    param(
+        [string]$CommandName,
+        [string]$ParameterName,
+        [string]$WordToComplete,
+        [CommandAst]$CommandAst,
+        [Hashtable]$FakeBoundParameters
+    )
+    $results = @()
+    $history = Get-History | Where-Object { $_.CommandLine -like "$WordToComplete*" }
+    $uniqueCommands = $history.CommandLine | Sort-Object -Unique
+
+    foreach ($command in $uniqueCommands) {
+        $completionResult = [System.Management.Automation.CompletionResult]::new($command, $command, 'ParameterValue', $command)
+        $results += $completionResult
+    }
+
+    return $results
+}
+
+Register-ArgumentCompleter -CommandName '*' -ParameterName '*' -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+    dotsuggest -CommandName $commandName -ParameterName $parameterName -WordToComplete $wordToComplete -CommandAst $commandAst -FakeBoundParameters $fakeBoundParameters
+}
+
+function dotkey {
+	return $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").Character.ToString().ToLower();
+}
+
+function dotsharp_add {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$csharp
+    )
+
+    Add-Type $csharp
+}
+
+function dotsharp {
+    param (
+        [string]$inputString
+    )
+    $regex = [regex]::new("^(?<class>[\w\d]+)\.(?<method>[\w\d]+)\((?<params>.*)\)$")
+    if ($regex.IsMatch($inputString)) {
+        $matchesq = $regex.Match($inputString)
+        $className = $matchesq.Groups["class"].Value
+        $methodName = $matchesq.Groups["method"].Value
+        $paramsString = $matchesq.Groups["params"].Value
+        $params = if ($paramsString -eq '') { @() } else { $paramsString.Split(",").Trim() }
+        $paramsJoined = $params -join ', '
+        $methodCall = "[$className]::$methodName($paramsJoined)"
+        return Invoke-Expression $methodCall
+    }
+    else {
+        throw "Input string does not match the expected pattern 'CLASS.METHOD(PARAMS)'."
+    }
+}
+
+function dotreverse([string]$inputS) {
+$length = $inputS.Length
+$result = ""
+
+for ($i = $length - 1; $i -ge 0; $i--) {
+    $result += $inputS[$i]
+}
+
+return $result;
+}
+
+function dotfactorial {
+    param(
+        [int]$n
+    )
+
+    $factorial = 1
+    for ($i = 1; $i -le $n; $i++) {
+        $factorial *= $i
+    }
+    return $factorial
+}
+
+function dotsort {
+    param (
+        [string]$jsonArray
+    )
+    $arr = $jsonArray | ConvertFrom-Json
+    $n = $arr.Length
+    for ($i = 0; $i -lt $n - 1; $i++) {
+        for ($j = 0; $j -lt $n - $i - 1; $j++) {
+            if ($arr[$j] -gt $arr[$j + 1]) {
+                $temp = $arr[$j]
+                $arr[$j] = $arr[$j + 1]
+                $arr[$j + 1] = $temp
+            }
+        }
+    }
+    return $arr
+}
+

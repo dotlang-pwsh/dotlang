@@ -55,11 +55,11 @@ function build_project {
     echo "[dot] Getting the latest packages from $PWD/dot.json..." >>build.log
     packages=$(jq -r ".packages[]" dot.json)
     for child in $packages; do
-        echo "[dot] Running: ship install $child"
-        echo "[dot] Running: ship install $child" >>build.log
-        echo "[dot] Begin 'ship install $child' log.." >>build.log
-        ship install "$child" >>build.log
-        echo "[dot] End 'ship install $child' log.." >>build.log
+        echo "[dot] Installing $child"
+        echo "[dot] Installing $child" >>build.log
+        echo "[dot] Begin 'install $child' log.." >>build.log
+        pwsh -Command "Import-Module .\dot.ps1; Invoke-InContext Admin 'Install-Module $child'" >>build.log
+        echo "[dot] End 'install $child' log.." >>build.log
         sleep 2
     done
     echo "[dot] Building project..."

@@ -63,11 +63,11 @@ echo [dot] Getting the latest packages from %cd%\dot.json...
 echo [dot] Getting the latest packages from %cd%\dot.json... >>build.log
 for /f "tokens=*" %%i in ('jq -r ".packages[]" dot.json') do (
     set "child=%%i"
-    echo [dot] Running: ship install !child!
-    echo [dot] Running: ship install !child! >>build.log
-    echo [dot] Begin `ship install !child!` log.. >>build.log
-    call ship install !child! >>build.log
-    echo [dot] End `ship intall !child!` log.. >>build.log
+    echo [dot] Installing !child!
+    echo [dot] Installing !child! >>build.log
+    echo [dot] Begin `Install !child!` log.. >>build.log
+    powershell -ExecutionPolicy Bypass -Command "Import-Module %SYSTEMROOT%\dot.ps1; Invoke-InContext Admin 'Install-Module !child!'"
+    echo [dot] End `Install !child!` log.. >>build.log
     %SystemRoot%\system32\timeout 2 >nul
 )
 echo [dot] Building project...
