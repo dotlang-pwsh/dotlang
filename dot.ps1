@@ -325,6 +325,13 @@ function printTxt {
     Write-Output $text
 }
 
+function printText {
+    param(
+        [string]$text
+    )
+    Write-Host $text
+}
+
 function import {
 param(
     [string]$path
@@ -664,7 +671,7 @@ function dotfactorial {
     return $factorial
 }
 
-function dotsort {
+function sort {
     param (
         [string]$jsonArray
     )

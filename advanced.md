@@ -114,3 +114,37 @@ printTxt("You've choosen the input $($inp+1)");
 Usage: dotui "Title" "Input 0","Input 1","Input 3", etc...
 
 Result: ![image](https://github.com/user-attachments/assets/4a587fe8-2e08-4151-83ce-2ab7dae0797b)
+
+### Sort Arrays
+To sort arrays in dotlang,
+```powershell
+$array = "[1, 6, 7, 2, 3]" # in JSON format
+# in v2
+$sortedArray = dotsort($array);
+# in v3
+$sortedArray = sort($array);
+```
+$sortedArray = @(1,2,3,6,7)
+cool?
+
+### Get User Input Key
+
+```powershell
+$key = dotkey;
+echo You Pressed "$key"
+```
+Output: `You Pressed "w"`
+
+### dotsharp
+dotsharp is used to integrate C# with dotlang.
+to add a C# script:
+```powershell
+dotsharp_add @"
+// your C# script
+"@
+```
+and to use it:
+
+```powershell
+dotsharp("CLASS.FUNCTION(PARAMS,GOES,HERE)");
+```
