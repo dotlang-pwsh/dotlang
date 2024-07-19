@@ -131,7 +131,7 @@ cool?
 
 ```powershell
 $key = dotkey;
-echo You Pressed "$key"
+printTxt 'You Pressed "$key"';
 ```
 Output: `You Pressed "w"`
 
