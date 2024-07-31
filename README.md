@@ -13,7 +13,7 @@ Import-Module .\dot.ps1 # Imports dotlang
 2- use it :)
 
 ```powershell
-printTxt("Hi I'm dotlang!"); # simicolon (;) is optional.
+printTxt("Hi I'm dotlang!"); # semicolon (;) is optional.
 ```
 
 ## Full Usage
